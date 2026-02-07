@@ -8320,9 +8320,7 @@ function renderMistakes() {
                 
                 if (isGuest) {
                     userInfoDiv.innerHTML = `
-                        <span style="color: #666;">👤 Khách</span>
-                        <span style="color: #999;">|</span>
-                        <span style="color: #ef4444; font-weight: 600;">${QuestionLimitManager.getRemainingQuestions()}/100</span>
+                        <span style="color: #666; font-weight: 600;">👤 Khách</span>
                         <button onclick="goToLogin()" style="
                             background: linear-gradient(135deg, #1e3c72, #7e22ce);
                             color: white;
@@ -8332,16 +8330,16 @@ function renderMistakes() {
                             font-size: 0.8rem;
                             cursor: pointer;
                             font-weight: 600;
+                            margin-left: 10px;
                         ">Đăng nhập</button>
                     `;
                 } else if (currentUser) {
                     const vipBadge = UserManager.isVIP() ? 
-                        '<span style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 0.75rem;">⭐ VIP</span>' : 
-                        '<span style="color: #ef4444; font-weight: 600;">' + QuestionLimitManager.getRemainingQuestions() + '/100</span>';
+                        '<span style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 0.75rem; margin-left: 10px;">⭐ VIP</span>' : 
+                        '';
                     
                     userInfoDiv.innerHTML = `
                         <span style="color: #1e3c72; font-weight: 600;">👤 ${currentUser.username}</span>
-                        <span style="color: #999;">|</span>
                         ${vipBadge}
                         <button onclick="logout()" style="
                             background: rgba(239, 68, 68, 0.1);
@@ -8352,6 +8350,7 @@ function renderMistakes() {
                             font-size: 0.8rem;
                             cursor: pointer;
                             font-weight: 600;
+                            margin-left: 10px;
                         ">Đăng xuất</button>
                     `;
                 }

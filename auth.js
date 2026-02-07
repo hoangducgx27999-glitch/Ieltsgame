@@ -168,7 +168,7 @@ const QuestionLimitManager = {
         count++;
         localStorage.setItem(AUTH_CONFIG.STORAGE_KEYS.QUESTION_COUNT, count.toString());
 
-        // Cập nhật vào user database
+        // Tự động lưu vào user database (KHÔNG BAO GIỜ RESET)
         const currentUser = UserManager.getCurrentUser();
         if (currentUser) {
             const users = UserManager.getAllUsers();
@@ -206,8 +206,10 @@ const QuestionLimitManager = {
         return parseInt(localStorage.getItem(AUTH_CONFIG.STORAGE_KEYS.QUESTION_COUNT) || '0');
     },
 
-    // Reset count (chỉ dùng khi test)
-    resetCount() {
+    // KHÔNG CÓ RESET - CHỈ DÀNH CHO ADMIN TEST
+    // User thường KHÔNG BAO GIỜ được reset
+    adminResetCount() {
+        console.warn('⚠️ ADMIN ONLY: Resetting question count');
         localStorage.setItem(AUTH_CONFIG.STORAGE_KEYS.QUESTION_COUNT, '0');
         
         const currentUser = UserManager.getCurrentUser();
@@ -223,28 +225,30 @@ const QuestionLimitManager = {
 
 // Theme manager
 const ThemeManager = {
-    FREE_THEME: 'gradient', // Theme mặc định cho free user
+    FREE_THEME: 'gradient', // Theme duy nhất cho FREE user
     
-    VIP_THEMES: ['space', 'ocean', 'sunset', 'forest'],
+    VIP_THEMES: ['space', 'ocean', 'sunset', 'forest'], // CHỈ VIP mới dùng được
 
     // Kiểm tra theme có được unlock không
     isThemeUnlocked(theme) {
         if (theme === this.FREE_THEME) {
-            return true; // Theme mặc định luôn unlock
+            return true; // Theme Gradient - FREE user được dùng
         }
 
         if (UserManager.isVIP()) {
-            return true; // VIP unlock tất cả
+            return true; // VIP unlock TẤT CẢ themes
         }
 
-        return false; // Free user chỉ dùng được theme mặc định
+        return false; // FREE user CHỈ dùng Gradient
     },
 
     // Lấy danh sách themes khả dụng
     getAvailableThemes() {
         if (UserManager.isVIP()) {
+            // VIP: Tất cả 5 themes
             return [this.FREE_THEME, ...this.VIP_THEMES];
         }
+        // FREE: CHỈ Gradient
         return [this.FREE_THEME];
     },
 
