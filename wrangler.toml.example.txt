@@ -1,0 +1,36 @@
+# Cloudflare Worker Configuration
+# Copy file này thành wrangler.toml và điền thông tin thực tế
+
+name = "ielts-game-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "ielts-game-db"
+database_id = "YOUR_DATABASE_ID_HERE"  # Lấy từ: wrangler d1 create ielts-game-db
+
+# KV namespace binding
+[[kv_namespaces]]
+binding = "PAYMENTS"
+id = "YOUR_KV_NAMESPACE_ID_HERE"  # Lấy từ: wrangler kv:namespace create "PAYMENTS"
+
+# Environment variables (optional)
+[vars]
+ENVIRONMENT = "production"
+APP_NAME = "IELTS Game"
+
+# Production environment (optional)
+[env.production]
+name = "ielts-game-api-prod"
+vars = { ENVIRONMENT = "production" }
+
+# Development environment (optional)
+[env.dev]
+name = "ielts-game-api-dev"
+vars = { ENVIRONMENT = "development" }
+
+# Cron triggers (optional - để scheduled tasks)
+# [triggers]
+# crons = ["0 0 * * *"]  # Chạy lúc 00:00 hàng ngày
