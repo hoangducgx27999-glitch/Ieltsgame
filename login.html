@@ -19,11 +19,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            padding: 60px 0;
         }
 
-        /* Animated background overlay */
+        /* Animated background */
         body::before {
             content: '';
             position: fixed;
@@ -48,7 +50,7 @@
         .emoji-particle {
             position: fixed;
             font-size: 2rem;
-            opacity: 0.4;
+            opacity: 0.6;
             pointer-events: none;
             z-index: 2;
             animation: float linear infinite;
@@ -60,10 +62,10 @@
                 opacity: 0;
             }
             10% {
-                opacity: 0.4;
+                opacity: 0.6;
             }
             90% {
-                opacity: 0.4;
+                opacity: 0.6;
             }
             100% {
                 transform: translateY(-100px) rotate(360deg);
@@ -71,89 +73,249 @@
             }
         }
 
-        /* User info bar at top */
-        #userInfoBar {
+        /* Avatar Button - góc phải trên */
+        #avatarButton {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 100;
-            display: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
             align-items: center;
-            gap: 12px;
-            animation: slideInRight 0.5s ease-out;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4); }
+        }
+
+        #avatarButton:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        #avatarButton.vip {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-color: #ffa500;
+            animation: pulseVIP 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseVIP {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
             }
-            to {
-                opacity: 1;
-                transform: translateX(0);
+            50% { 
+                transform: scale(1.08); 
+                box-shadow: 0 12px 35px rgba(255, 215, 0, 0.7);
             }
         }
 
-        #userInfoBar .user-name {
+        /* Account Info Popup */
+        #accountInfoPopup {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            z-index: 999;
+            width: 320px;
+            transform: scale(0);
+            transform-origin: top right;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #accountInfoPopup.show {
+            transform: scale(1);
+        }
+
+        .popup-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .popup-header h3 {
             color: #1e3c72;
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
         }
 
-        #userInfoBar .vip-badge {
+        .popup-header .username {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .popup-header .badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .popup-header .badge.vip {
             background: linear-gradient(135deg, #ffd700, #ffed4e);
             color: #000;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.8rem;
         }
 
-        #userInfoBar .free-badge {
+        .popup-header .badge.free {
             background: rgba(30, 60, 114, 0.1);
             color: #1e3c72;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.8rem;
         }
 
-        #userInfoBar .logout-btn {
+        .emoji-selector {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .emoji-selector-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .emoji-option {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .emoji-option:hover {
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+
+        .emoji-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .emoji-option.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .emoji-option.locked::after {
+            content: '🔒';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            font-size: 0.7rem;
+        }
+
+        .popup-info {
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .popup-info strong {
+            color: #1e3c72;
+        }
+
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .popup-btn {
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .popup-btn.play {
+            background: linear-gradient(135deg, #1e3c72, #7e22ce);
+            color: white;
+        }
+
+        .popup-btn.play:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        .popup-btn.logout {
             background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
             border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
         }
 
-        #userInfoBar .logout-btn:hover {
+        .popup-btn.logout:hover {
             background: rgba(239, 68, 68, 0.2);
         }
 
-        #userInfoBar .play-btn {
-            background: linear-gradient(135deg, #1e3c72, #7e22ce);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 12px;
+        .popup-contact {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .popup-contact p {
+            color: #666;
             font-size: 0.85rem;
-            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .popup-contact a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #0068ff, #0084ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.3s;
         }
 
-        #userInfoBar .play-btn:hover {
+        .popup-contact a:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 104, 255, 0.4);
         }
 
         .login-container {
@@ -167,6 +329,7 @@
             border-radius: 30px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.6s ease-out;
+            margin: 20px auto;
         }
 
         @keyframes slideUp {
@@ -422,11 +585,6 @@
             animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
         .remaining-plays.hidden {
             display: none;
         }
@@ -539,16 +697,69 @@
             .remaining-plays .count {
                 font-size: 2rem;
             }
+
+            #avatarButton {
+                width: 50px;
+                height: 50px;
+                font-size: 1.6rem;
+            }
+
+            #accountInfoPopup {
+                width: 280px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- User Info Bar (shown when logged in) -->
-    <div id="userInfoBar">
-        <span class="user-name" id="displayUsername"></span>
-        <span class="badge" id="displayBadge"></span>
-        <button class="play-btn" onclick="goToGame()">🎮 Vào Game</button>
-        <button class="logout-btn" onclick="handleLogout()">Đăng xuất</button>
+    <!-- Avatar Button -->
+    <div id="avatarButton" onclick="toggleAccountPopup()">
+        <span id="avatarEmoji">👨🏻‍🚀</span>
+    </div>
+
+    <!-- Account Info Popup -->
+    <div id="accountInfoPopup">
+        <div class="popup-header">
+            <h3>Tài khoản</h3>
+            <div class="username" id="popupUsername">Chưa đăng nhập</div>
+            <div class="badge free" id="popupBadge">FREE</div>
+        </div>
+
+        <!-- Emoji Selector -->
+        <div class="emoji-selector" id="emojiSelector">
+            <div class="emoji-selector-title">Chọn avatar của bạn:</div>
+            <div class="emoji-grid">
+                <div class="emoji-option selected" data-emoji="👨🏻‍🚀" onclick="selectEmoji('👨🏻‍🚀')">👨🏻‍🚀</div>
+                <div class="emoji-option locked" data-emoji="🧛🏻‍♂️" onclick="selectEmoji('🧛🏻‍♂️')">🧛🏻‍♂️</div>
+                <div class="emoji-option locked" data-emoji="🎅🏻" onclick="selectEmoji('🎅🏻')">🎅🏻</div>
+                <div class="emoji-option locked" data-emoji="🦸🏻‍♂️" onclick="selectEmoji('🦸🏻‍♂️')">🦸🏻‍♂️</div>
+                <div class="emoji-option locked" data-emoji="🥷🏻" onclick="selectEmoji('🥷🏻')">🥷🏻</div>
+                <div class="emoji-option locked" data-emoji="👮🏻‍♂️" onclick="selectEmoji('👮🏻‍♂️')">👮🏻‍♂️</div>
+                <div class="emoji-option locked" data-emoji="🐼" onclick="selectEmoji('🐼')">🐼</div>
+                <div class="emoji-option locked" data-emoji="🐯" onclick="selectEmoji('🐯')">🐯</div>
+                <div class="emoji-option locked" data-emoji="🤵🏻‍♂️" onclick="selectEmoji('🤵🏻‍♂️')">🤵🏻‍♂️</div>
+                <div class="emoji-option locked" data-emoji="👼🏻" onclick="selectEmoji('👼🏻')">👼🏻</div>
+            </div>
+        </div>
+
+        <!-- Account Info -->
+        <div class="popup-info" id="popupInfo">
+            <strong>📌 Tài khoản FREE:</strong><br>
+            100 lượt chơi, chỉ giao diện Gradient
+        </div>
+
+        <!-- Buttons -->
+        <div class="popup-buttons" id="popupButtons">
+            <button class="popup-btn play" onclick="goToGame()">🎮 Vào Game</button>
+            <button class="popup-btn logout" id="logoutBtn" style="display:none;" onclick="handleLogout()">Đăng xuất</button>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="popup-contact">
+            <p><strong>Nhà phát hành</strong></p>
+            <p>📚 3500 từ vựng IELTS 5.0-7.0</p>
+            <a href="https://zalo.me/0343767490" target="_blank">💬 Zalo: 0343767490</a>
+        </div>
     </div>
 
     <div class="login-container">
@@ -599,16 +810,15 @@
                 🎮 Chơi với tư cách khách
             </button>
 
-            <!-- Hiển thị số lượt còn lại -->
             <div id="remainingPlays" class="remaining-plays hidden">
                 <h4>⚠️ Lượt chơi còn lại</h4>
                 <div class="count" id="remainingCount">100/100</div>
-                <p>Đăng ký tài khoản để lưu tiến độ của bạn!</p>
+                <p>Đăng ký tài khoản để lưu tiến độ!</p>
             </div>
 
             <div class="info-box">
-                <strong>📌 Tài khoản FREE:</strong> 100 lượt chơi, chỉ giao diện Gradient<br>
-                <strong>⭐ Tài khoản VIP:</strong> Không giới hạn, mở khóa tất cả tính năng
+                <strong>📌 Tài khoản FREE:</strong> 100 lượt, chỉ giao diện Gradient<br>
+                <strong>⭐ Tài khoản VIP:</strong> Không giới hạn, mở khóa tất cả
             </div>
         </div>
 
@@ -652,20 +862,18 @@
                 🎮 Chơi với tư cách khách
             </button>
 
-            <!-- Hiển thị số lượt còn lại -->
             <div id="remainingPlaysRegister" class="remaining-plays hidden">
                 <h4>⚠️ Lượt chơi còn lại</h4>
                 <div class="count" id="remainingCountRegister">100/100</div>
-                <p>Đăng ký tài khoản để lưu tiến độ của bạn!</p>
+                <p>Đăng ký tài khoản để lưu tiến độ!</p>
             </div>
 
             <div class="info-box">
-                <strong>📌 Đăng ký FREE:</strong> 100 lượt chơi, chỉ giao diện Gradient<br>
-                <strong>⭐ Nâng cấp VIP:</strong> Liên hệ Zalo để mở khóa tất cả
+                <strong>📌 Đăng ký FREE:</strong> 100 lượt, chỉ giao diện Gradient<br>
+                <strong>⭐ Nâng cấp VIP:</strong> Liên hệ Zalo để mở khóa
             </div>
         </div>
 
-        <!-- Contact Info -->
         <div class="contact-info">
             <h3>💎 Nâng cấp VIP / Hỗ trợ</h3>
             <p>📱 Nhà phát hành</p>
@@ -677,9 +885,9 @@
 
     <script src="auth.js"></script>
     <script>
-        // Create floating emoji particles
+        // Create floating emojis - ĐÚNG EMOJI THEO YÊU CẦU
         function createFloatingEmojis() {
-            const emojis = ['📚', '✨', '⭐', '💫', '🌟', '📖', '✏️', '🎯'];
+            const emojis = ['🐠', '🐟', '🐬', '🐡', '🐧', '🦭', '🦚', '🦋', '🐞', '🐛'];
             const container = document.body;
             
             setInterval(() => {
@@ -698,7 +906,94 @@
             }, 2000);
         }
 
-        // Switch between login and register tabs
+        // Toggle account popup
+        function toggleAccountPopup() {
+            const popup = document.getElementById('accountInfoPopup');
+            popup.classList.toggle('show');
+        }
+
+        // Close popup when clicking outside
+        document.addEventListener('click', function(e) {
+            const popup = document.getElementById('accountInfoPopup');
+            const button = document.getElementById('avatarButton');
+            
+            if (!popup.contains(e.target) && !button.contains(e.target)) {
+                popup.classList.remove('show');
+            }
+        });
+
+        // Select emoji avatar
+        function selectEmoji(emoji) {
+            const isVIP = UserManager.isVIP();
+            const freeEmojis = ['👨🏻‍🚀'];
+            
+            // Kiểm tra quyền
+            if (!isVIP && !freeEmojis.includes(emoji)) {
+                alert('⭐ Nâng cấp VIP để mở khóa avatar này!\n\n💬 Liên hệ Zalo: 0343767490');
+                return;
+            }
+            
+            // Cập nhật UI
+            document.getElementById('avatarEmoji').textContent = emoji;
+            
+            // Cập nhật selected state
+            document.querySelectorAll('.emoji-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.getAttribute('data-emoji') === emoji) {
+                    opt.classList.add('selected');
+                }
+            });
+            
+            // Lưu vào localStorage
+            localStorage.setItem('ielts_user_avatar', emoji);
+        }
+
+        // Update account popup
+        function updateAccountPopup() {
+            const currentUser = UserManager.getCurrentUser();
+            const isVIP = UserManager.isVIP();
+            
+            if (currentUser) {
+                // Đã đăng nhập
+                document.getElementById('popupUsername').textContent = currentUser.username;
+                document.getElementById('popupBadge').textContent = isVIP ? '⭐ VIP' : 'FREE';
+                document.getElementById('popupBadge').className = isVIP ? 'badge vip' : 'badge free';
+                document.getElementById('logoutBtn').style.display = 'block';
+                
+                // Unlock emoji cho VIP
+                const emojiOptions = document.querySelectorAll('.emoji-option');
+                emojiOptions.forEach(opt => {
+                    if (isVIP) {
+                        opt.classList.remove('locked');
+                    }
+                });
+                
+                // Update info text
+                if (isVIP) {
+                    document.getElementById('popupInfo').innerHTML = '<strong>⭐ Tài khoản VIP:</strong><br>Không giới hạn lượt chơi, mở khóa tất cả giao diện';
+                    document.getElementById('avatarButton').classList.add('vip');
+                } else {
+                    const remaining = QuestionLimitManager.getRemainingQuestions();
+                    document.getElementById('popupInfo').innerHTML = `<strong>📌 Tài khoản FREE:</strong><br>Còn ${remaining}/100 lượt chơi`;
+                    document.getElementById('avatarButton').classList.remove('vip');
+                }
+                
+                // Load saved avatar
+                const savedAvatar = localStorage.getItem('ielts_user_avatar') || '👨🏻‍🚀';
+                document.getElementById('avatarEmoji').textContent = savedAvatar;
+                
+            } else {
+                // Chưa đăng nhập
+                document.getElementById('popupUsername').textContent = 'Chưa đăng nhập';
+                document.getElementById('popupBadge').textContent = 'FREE';
+                document.getElementById('popupBadge').className = 'badge free';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('popupInfo').innerHTML = '<strong>📌 Tài khoản FREE:</strong><br>100 lượt chơi, chỉ giao diện Gradient';
+                document.getElementById('avatarButton').classList.remove('vip');
+            }
+        }
+
+        // Switch tabs
         function switchTab(tab) {
             const tabs = document.querySelectorAll('.tab-btn');
             const forms = document.querySelectorAll('.form-container');
@@ -717,7 +1012,7 @@
             clearMessages();
         }
 
-        // Toggle password visibility
+        // Toggle password
         function togglePassword(inputId) {
             const input = document.getElementById(inputId);
             const icon = input.nextElementSibling;
@@ -738,7 +1033,7 @@
             messageDiv.className = `message ${type}`;
         }
 
-        // Clear all messages
+        // Clear messages
         function clearMessages() {
             const messages = document.querySelectorAll('.message');
             messages.forEach(msg => {
@@ -769,14 +1064,13 @@
                 const result = UserManager.login(username, password);
                 
                 if (result.success) {
-                    // Lưu trạng thái "ghi nhớ đăng nhập"
                     if (rememberMe) {
                         localStorage.setItem('ielts_remember_me', 'true');
-                    } else {
-                        localStorage.removeItem('ielts_remember_me');
                     }
                     
-                    showMessage('loginMessage', '✅ Đăng nhập thành công! Đang chuyển vào game...', 'success');
+                    showMessage('loginMessage', '✅ Đăng nhập thành công!', 'success');
+                    updateAccountPopup();
+                    
                     setTimeout(() => {
                         window.location.href = 'game.html';
                     }, 1000);
@@ -815,7 +1109,7 @@
                 const result = UserManager.register(username, password);
                 
                 if (result.success) {
-                    showMessage('registerMessage', '✅ Đăng ký thành công! Đang chuyển sang đăng nhập...', 'success');
+                    showMessage('registerMessage', '✅ Đăng ký thành công! Đang chuyển...', 'success');
                     setTimeout(() => {
                         document.getElementById('loginUsername').value = username;
                         document.getElementById('loginPassword').value = password;
@@ -831,68 +1125,10 @@
 
         // Play as guest
         function playAsGuest() {
-            // Reset lượt chơi khi bắt đầu chơi mới với tư cách khách
             localStorage.setItem('playAsGuest', 'true');
             localStorage.setItem('ielts_question_count', '0');
             UserManager.logout();
             window.location.href = 'game.html';
-        }
-
-        // Update remaining plays display
-        function updateRemainingPlaysDisplay() {
-            const isGuest = localStorage.getItem('playAsGuest') === 'true';
-            const isLoggedIn = UserManager.isLoggedIn();
-            
-            // Chỉ hiển thị nếu là khách HOẶC user FREE (không phải VIP)
-            if (isGuest || (isLoggedIn && !UserManager.isVIP())) {
-                const remaining = QuestionLimitManager.getRemainingQuestions();
-                
-                // Cập nhật cả 2 form
-                const remainingDisplay = document.getElementById('remainingPlays');
-                const remainingDisplayRegister = document.getElementById('remainingPlaysRegister');
-                const countElement = document.getElementById('remainingCount');
-                const countElementRegister = document.getElementById('remainingCountRegister');
-                
-                if (remainingDisplay) {
-                    remainingDisplay.classList.remove('hidden');
-                    if (countElement) {
-                        countElement.textContent = `${remaining}/100`;
-                    }
-                }
-                
-                if (remainingDisplayRegister) {
-                    remainingDisplayRegister.classList.remove('hidden');
-                    if (countElementRegister) {
-                        countElementRegister.textContent = `${remaining}/100`;
-                    }
-                }
-            }
-        }
-
-        // Show user info bar when logged in
-        function showUserInfoBar() {
-            const currentUser = UserManager.getCurrentUser();
-            if (currentUser) {
-                const userInfoBar = document.getElementById('userInfoBar');
-                const displayUsername = document.getElementById('displayUsername');
-                const displayBadge = document.getElementById('displayBadge');
-                
-                displayUsername.textContent = '👤 ' + currentUser.username;
-                
-                if (UserManager.isVIP()) {
-                    displayBadge.textContent = '⭐ VIP';
-                    displayBadge.className = 'vip-badge';
-                } else {
-                    displayBadge.textContent = 'FREE';
-                    displayBadge.className = 'free-badge';
-                }
-                
-                userInfoBar.style.display = 'flex';
-                
-                // Ẩn form đăng nhập
-                document.querySelector('.login-container').style.opacity = '0.7';
-                document.querySelector('.login-container').style.pointerEvents = 'none';
-            }
         }
 
         // Go to game
@@ -900,7 +1136,7 @@
             window.location.href = 'game.html';
         }
 
-        // Handle logout from user info bar
+        // Handle logout
         function handleLogout() {
             if (confirm('Bạn có chắc muốn đăng xuất?')) {
                 UserManager.logout();
@@ -909,24 +1145,38 @@
             }
         }
 
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            // Create floating emojis
-            createFloatingEmojis();
+        // Update remaining plays
+        function updateRemainingPlaysDisplay() {
+            const isGuest = localStorage.getItem('playAsGuest') === 'true';
+            const isLoggedIn = UserManager.isLoggedIn();
             
-            // Kiểm tra đã đăng nhập chưa
-            if (UserManager.isLoggedIn()) {
-                showUserInfoBar();
-            } else {
-                // Nếu là khách và quay lại trang login -> xóa session khách
-                const isGuest = localStorage.getItem('playAsGuest') === 'true';
-                if (isGuest) {
-                    localStorage.removeItem('playAsGuest');
-                }
+            if (isGuest || (isLoggedIn && !UserManager.isVIP())) {
+                const remaining = QuestionLimitManager.getRemainingQuestions();
+                
+                const displays = [
+                    { el: document.getElementById('remainingPlays'), count: document.getElementById('remainingCount') },
+                    { el: document.getElementById('remainingPlaysRegister'), count: document.getElementById('remainingCountRegister') }
+                ];
+                
+                displays.forEach(d => {
+                    if (d.el && d.count) {
+                        d.el.classList.remove('hidden');
+                        d.count.textContent = `${remaining}/100`;
+                    }
+                });
             }
-            
-            // Cập nhật hiển thị số lượt
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            createFloatingEmojis();
+            updateAccountPopup();
             updateRemainingPlaysDisplay();
+            
+            const isGuest = localStorage.getItem('playAsGuest') === 'true';
+            if (isGuest && !UserManager.isLoggedIn()) {
+                localStorage.removeItem('playAsGuest');
+            }
         });
     </script>
 </body>

@@ -8478,23 +8478,45 @@ function renderMistakes() {
         // Restrict theme selector for FREE users
         function restrictThemeSelector() {
             if (UserManager.isVIP()) {
-                return; // VIP can use all themes
+                // VIP: Tất cả theme đều mở khóa
+                return;
             }
 
-            // FREE user: ẨN HOÀN TOÀN các theme khác, chỉ hiển thị Gradient
+            // FREE user: HIỆN tất cả theme nhưng có khóa 🔒
             const themeButtons = document.querySelectorAll('.theme-option, .theme-box');
             themeButtons.forEach(btn => {
                 const theme = btn.getAttribute('data-theme') || btn.dataset.theme;
+                
                 if (theme && theme !== 'gradient') {
-                    // ẨN HOÀN TOÀN - FREE user không thấy
-                    btn.style.display = 'none';
+                    // Theme VIP: Thêm khóa, không cho click
+                    btn.style.opacity = '0.6';
+                    btn.style.cursor = 'not-allowed';
+                    btn.style.position = 'relative';
+                    
+                    // Thêm icon khóa
+                    const lockIcon = document.createElement('div');
+                    lockIcon.innerHTML = '🔒';
+                    lockIcon.style.cssText = `
+                        position: absolute;
+                        top: 5px;
+                        right: 5px;
+                        font-size: 1.2rem;
+                        pointer-events: none;
+                    `;
+                    btn.appendChild(lockIcon);
+                    
+                    // Chặn click và hiện thông báo VIP
+                    btn.onclick = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        showVIPMessage();
+                        return false;
+                    };
                 }
             });
 
-            // Force apply gradient theme for FREE users
-            if (!UserManager.isVIP()) {
-                changeTheme('gradient');
-            }
+            // Force gradient theme cho FREE
+            changeTheme('gradient');
         }
 
         // Show VIP upgrade message
