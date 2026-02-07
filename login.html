@@ -46,13 +46,13 @@
             50% { transform: translate(20px, 20px); }
         }
 
-        /* Floating emoji particles */
+        /* Floating emoji particles - Trôi phía sau form */
         .emoji-particle {
             position: fixed;
             font-size: 2rem;
             opacity: 0.6;
             pointer-events: none;
-            z-index: 2;
+            z-index: 1; /* Giảm xuống 1 để nổi phía sau */
             animation: float linear infinite;
         }
 
@@ -745,7 +745,7 @@
         <!-- Account Info -->
         <div class="popup-info" id="popupInfo">
             <strong>📌 Tài khoản FREE:</strong><br>
-            100 lượt chơi, chỉ giao diện Gradient
+            200 lượt chơi, chỉ giao diện Gradient
         </div>
 
         <!-- Buttons -->
@@ -807,17 +807,17 @@
             <div class="divider"><span>hoặc</span></div>
 
             <button class="guest-btn" onclick="playAsGuest()">
-                🎮 Chơi với tư cách khách
+                🎮 Chơi ngay
             </button>
 
             <div id="remainingPlays" class="remaining-plays hidden">
                 <h4>⚠️ Lượt chơi còn lại</h4>
-                <div class="count" id="remainingCount">100/100</div>
+                <div class="count" id="remainingCount">200/200</div>
                 <p>Đăng ký tài khoản để lưu tiến độ!</p>
             </div>
 
             <div class="info-box">
-                <strong>📌 Tài khoản FREE:</strong> 100 lượt, chỉ giao diện Gradient<br>
+                <strong>📌 Tài khoản FREE:</strong> 200 lượt, chỉ giao diện Gradient<br>
                 <strong>⭐ Tài khoản VIP:</strong> Không giới hạn, mở khóa tất cả
             </div>
         </div>
@@ -859,17 +859,17 @@
             <div class="divider"><span>hoặc</span></div>
 
             <button class="guest-btn" onclick="playAsGuest()">
-                🎮 Chơi với tư cách khách
+                🎮 Chơi ngay
             </button>
 
             <div id="remainingPlaysRegister" class="remaining-plays hidden">
                 <h4>⚠️ Lượt chơi còn lại</h4>
-                <div class="count" id="remainingCountRegister">100/100</div>
+                <div class="count" id="remainingCountRegister">200/200</div>
                 <p>Đăng ký tài khoản để lưu tiến độ!</p>
             </div>
 
             <div class="info-box">
-                <strong>📌 Đăng ký FREE:</strong> 100 lượt, chỉ giao diện Gradient<br>
+                <strong>📌 Đăng ký FREE:</strong> 200 lượt, chỉ giao diện Gradient<br>
                 <strong>⭐ Nâng cấp VIP:</strong> Liên hệ Zalo để mở khóa
             </div>
         </div>
@@ -974,7 +974,7 @@
                     document.getElementById('avatarButton').classList.add('vip');
                 } else {
                     const remaining = QuestionLimitManager.getRemainingQuestions();
-                    document.getElementById('popupInfo').innerHTML = `<strong>📌 Tài khoản FREE:</strong><br>Còn ${remaining}/100 lượt chơi`;
+                    document.getElementById('popupInfo').innerHTML = `<strong>📌 Tài khoản FREE:</strong><br>Còn ${remaining}/200 lượt chơi`;
                     document.getElementById('avatarButton').classList.remove('vip');
                 }
                 
@@ -988,7 +988,7 @@
                 document.getElementById('popupBadge').textContent = 'FREE';
                 document.getElementById('popupBadge').className = 'badge free';
                 document.getElementById('logoutBtn').style.display = 'none';
-                document.getElementById('popupInfo').innerHTML = '<strong>📌 Tài khoản FREE:</strong><br>100 lượt chơi, chỉ giao diện Gradient';
+                document.getElementById('popupInfo').innerHTML = '<strong>📌 Tài khoản FREE:</strong><br>200 lượt chơi, chỉ giao diện Gradient';
                 document.getElementById('avatarButton').classList.remove('vip');
             }
         }
@@ -1123,7 +1123,7 @@
             }, 500);
         }
 
-        // Play as guest
+        // Chơi ngay
         function playAsGuest() {
             localStorage.setItem('playAsGuest', 'true');
             localStorage.setItem('ielts_question_count', '0');
