@@ -240,6 +240,205 @@
             transform: scale(0.9);
         }
 
+        /* Avatar Button - góc phải trên */
+        #avatarButton {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 102;
+            transition: all 0.3s;
+            animation: avatarPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4); }
+        }
+
+        #avatarButton:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        #avatarButton.vip {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-color: #ffa500;
+            animation: avatarPulseVIP 2s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulseVIP {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+            }
+            50% { 
+                transform: scale(1.08); 
+                box-shadow: 0 12px 35px rgba(255, 215, 0, 0.7);
+            }
+        }
+
+        /* Account Info Popup */
+        #accountInfoPopup {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            z-index: 101;
+            width: 320px;
+            max-width: calc(100vw - 40px);
+            transform: scale(0);
+            transform-origin: top right;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #accountInfoPopup.show {
+            transform: scale(1);
+        }
+
+        .popup-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .popup-header h3 {
+            color: #1e3c72;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .popup-header .username {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .popup-header .badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .popup-header .badge.vip {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+        }
+
+        .popup-header .badge.free {
+            background: rgba(30, 60, 114, 0.1);
+            color: #1e3c72;
+        }
+
+        .popup-info {
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .popup-info strong {
+            color: #1e3c72;
+        }
+
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .popup-btn {
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .popup-btn.logout {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .popup-btn.logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .popup-contact {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .popup-contact p {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .popup-contact a {
+            display: inline-block;
+            background: linear-gradient(135deg, #0068ff, #0084ff);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .popup-contact a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 104, 255, 0.4);
+        }
+
+        /* Play count display */
+        #playCountDisplay {
+            position: fixed;
+            top: 70px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            font-weight: 600;
+            color: white;
+            font-size: 0.85rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        #playCountDisplay.vip {
+            background: rgba(255, 215, 0, 0.3);
+        }
+
+
         /* Compact question box */
         #questionBox {
             position: fixed;
@@ -1956,6 +2155,38 @@
 </style>
 </head>
 <body class="theme-gradient">
+
+    <!-- Avatar Button -->
+    <button id="avatarButton" onclick="toggleAccountPopup()">👨‍🚀</button>
+
+    <!-- Account Info Popup -->
+    <div id="accountInfoPopup">
+        <div class="popup-header">
+            <h3>Thông tin tài khoản</h3>
+            <div class="username" id="popupUsername">Guest</div>
+            <div class="badge free" id="popupBadge">FREE</div>
+        </div>
+        
+        <div class="popup-info">
+            <p><strong>Số lượt chơi:</strong> <span id="popupPlayCount">0/100</span></p>
+            <p id="vipNotice" style="display:none;"><strong>🎉 Không giới hạn lượt chơi!</strong></p>
+        </div>
+
+        <div class="popup-buttons">
+            <button class="popup-btn logout" onclick="logout()">🚪 Đăng xuất</button>
+        </div>
+
+        <div class="popup-contact">
+            <p>Nâng cấp VIP để mở khóa tất cả tính năng!</p>
+            <a href="https://zalo.me/0343767490" target="_blank">💬 Liên hệ Zalo</a>
+        </div>
+    </div>
+
+    <!-- Play Count Display -->
+    <div id="playCountDisplay">
+        <span id="playCountText">0/100</span>
+    </div>
+
     <!-- Theme-specific floating emojis container -->
     <div id="themeEmojis"></div>
 
@@ -8478,46 +8709,62 @@ function renderMistakes() {
         // Restrict theme selector for FREE users
         function restrictThemeSelector() {
             if (UserManager.isVIP()) {
-                // VIP: Tất cả theme đều mở khóa
+                // VIP: Mở khóa tất cả theme
+                document.querySelectorAll('.theme-option, .theme-box').forEach(box => {
+                    box.classList.remove('locked');
+                    box.style.opacity = '1';
+                    box.style.cursor = 'pointer';
+                    // Remove lock icon if exists
+                    const lockIcon = box.querySelector('div');
+                    if (lockIcon && lockIcon.innerHTML === '🔒') {
+                        lockIcon.remove();
+                    }
+                });
                 return;
             }
 
-            // FREE user: HIỆN tất cả theme nhưng có khóa 🔒
+            // FREE user: Khóa theme VIP
             const themeButtons = document.querySelectorAll('.theme-option, .theme-box');
             themeButtons.forEach(btn => {
                 const theme = btn.getAttribute('data-theme') || btn.dataset.theme;
                 
                 if (theme && theme !== 'gradient') {
-                    // Theme VIP: Thêm khóa, không cho click
+                    btn.classList.add('locked');
                     btn.style.opacity = '0.6';
                     btn.style.cursor = 'not-allowed';
                     btn.style.position = 'relative';
                     
-                    // Thêm icon khóa
-                    const lockIcon = document.createElement('div');
-                    lockIcon.innerHTML = '🔒';
-                    lockIcon.style.cssText = `
-                        position: absolute;
-                        top: 5px;
-                        right: 5px;
-                        font-size: 1.2rem;
-                        pointer-events: none;
-                    `;
-                    btn.appendChild(lockIcon);
+                    // Thêm icon khóa nếu chưa có
+                    if (!btn.querySelector('div')) {
+                        const lockIcon = document.createElement('div');
+                        lockIcon.innerHTML = '🔒';
+                        lockIcon.style.cssText = `
+                            position: absolute;
+                            top: 5px;
+                            right: 5px;
+                            font-size: 1.2rem;
+                            pointer-events: none;
+                        `;
+                        btn.appendChild(lockIcon);
+                    }
                     
-                    // Chặn click và hiện thông báo VIP
-                    btn.onclick = function(e) {
+                    // Chặn click - QUAN TRỌNG: phải dùng addEventListener
+                    btn.onclick = null; // Xóa onclick cũ
+                    btn.removeEventListener('click', btn._vipClickHandler); // Remove old handler
+                    btn._vipClickHandler = function(e) {
                         e.preventDefault();
                         e.stopPropagation();
                         showVIPMessage();
                         return false;
                     };
+                    btn.addEventListener('click', btn._vipClickHandler, true); // Use capture phase
                 }
             });
 
-            // Force gradient theme cho FREE
+            // Force gradient theme
             changeTheme('gradient');
         }
+
 
         // Show VIP upgrade message
         function showVIPMessage() {
@@ -8588,6 +8835,7 @@ function renderMistakes() {
             
             // Increment question count
             QuestionLimitManager.incrementQuestionCount();
+            updatePlayCountDisplay();
             
             // Update play count display (thay vì updateUserInfoDisplay)
             updatePlayCountDisplay();
@@ -8677,6 +8925,90 @@ function renderMistakes() {
                 homeBtn.click();
             }
         }
+
+
+        // ===== AVATAR & USER INFO FUNCTIONS =====
+        
+        // Toggle account popup
+        function toggleAccountPopup() {
+            const popup = document.getElementById('accountInfoPopup');
+            popup.classList.toggle('show');
+            
+            if (popup.classList.contains('show')) {
+                updateUserInfoPopup();
+            }
+        }
+
+        // Update user info in popup
+        function updateUserInfoPopup() {
+            const currentUser = UserManager.getCurrentUser();
+            const isVIP = UserManager.isVIP();
+            
+            if (currentUser) {
+                document.getElementById('popupUsername').textContent = currentUser.username;
+                
+                const badge = document.getElementById('popupBadge');
+                if (isVIP) {
+                    badge.textContent = '💎 VIP';
+                    badge.className = 'badge vip';
+                    document.getElementById('vipNotice').style.display = 'block';
+                    document.getElementById('popupPlayCount').parentElement.style.display = 'none';
+                } else {
+                    badge.textContent = 'FREE';
+                    badge.className = 'badge free';
+                    document.getElementById('vipNotice').style.display = 'none';
+                    document.getElementById('popupPlayCount').parentElement.style.display = 'block';
+                    
+                    const played = QuestionLimitManager.getPlayedQuestions();
+                    const remaining = QuestionLimitManager.getRemainingQuestions();
+                    document.getElementById('popupPlayCount').textContent = `${played}/100 (còn ${remaining})`;
+                }
+
+                // Update avatar button style
+                const avatarBtn = document.getElementById('avatarButton');
+                if (isVIP) {
+                    avatarBtn.classList.add('vip');
+                } else {
+                    avatarBtn.classList.remove('vip');
+                }
+            }
+        }
+
+        // Update play count display
+        function updatePlayCountDisplay() {
+            const playCountDisplay = document.getElementById('playCountDisplay');
+            const playCountText = document.getElementById('playCountText');
+            
+            if (UserManager.isVIP()) {
+                playCountText.textContent = '∞ VIP';
+                playCountDisplay.classList.add('vip');
+            } else {
+                const played = QuestionLimitManager.getPlayedQuestions();
+                playCountText.textContent = `${played}/100`;
+                playCountDisplay.classList.remove('vip');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                UserManager.logout();
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Close popup when clicking outside
+        document.addEventListener('click', function(e) {
+            const popup = document.getElementById('accountInfoPopup');
+            const avatarBtn = document.getElementById('avatarButton');
+            
+            if (popup && popup.classList.contains('show') && 
+                !popup.contains(e.target) && 
+                !avatarBtn.contains(e.target)) {
+                popup.classList.remove('show');
+            }
+        });
+
 
     </script>
 </body>
