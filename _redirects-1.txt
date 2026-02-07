@@ -1,3 +1,0 @@
-# Cloudflare Pages redirects
-# Redirect root to login page
-/  /login.html  200
