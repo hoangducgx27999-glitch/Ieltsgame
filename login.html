@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Đăng nhập - IELTS Vocabulary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 420px;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #1e3c72, #7e22ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: rgba(30, 60, 114, 0.1);
+            color: #666;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #1e3c72, #7e22ce);
+            color: white;
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            border: 2px solid rgba(30, 60, 114, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 4px rgba(30, 60, 114, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.2rem;
+        }
+
+        .toggle-password {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: #1e3c72;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1e3c72, #7e22ce);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            display: block;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            display: block;
+        }
+
+        .guest-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            border: 2px solid rgba(30, 60, 114, 0.3);
+            border-radius: 12px;
+            background: white;
+            color: #1e3c72;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .guest-btn:hover {
+            background: rgba(30, 60, 114, 0.05);
+            border-color: #1e3c72;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(30, 60, 114, 0.2);
+        }
+
+        .divider span {
+            padding: 0 15px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(30, 60, 114, 0.05);
+            border-left: 4px solid #1e3c72;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .info-box strong {
+            color: #1e3c72;
+        }
+
+        .contact-info {
+            margin-top: 25px;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.08), rgba(126, 34, 206, 0.08));
+            border-radius: 15px;
+            border: 2px solid rgba(30, 60, 114, 0.15);
+        }
+
+        .contact-info h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .contact-info p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .zalo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #0068ff, #0084ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 104, 255, 0.3);
+        }
+
+        .zalo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 104, 255, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .logo h1 {
+                font-size: 1.6rem;
+            }
+
+            .tab-btn {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>📚 IELTS Vocabulary</h1>
+            <p>3500 từ vựng 5.0-7.0</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('login')">Đăng nhập</button>
+            <button class="tab-btn" onclick="switchTab('register')">Đăng ký</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="form-container active">
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label for="loginUsername">Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="loginUsername" required autocomplete="username">
+                        <span class="input-icon">👤</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="loginPassword">Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="loginPassword" required autocomplete="current-password">
+                        <span class="input-icon toggle-password" onclick="togglePassword('loginPassword')">👁️</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="loginBtn">
+                    Đăng nhập
+                </button>
+            </form>
+
+            <div id="loginMessage" class="message"></div>
+
+            <div class="divider"><span>hoặc</span></div>
+
+            <button class="guest-btn" onclick="playAsGuest()">
+                🎮 Chơi với tư cách khách
+            </button>
+
+            <div class="info-box">
+                <strong>📌 Tài khoản FREE:</strong> Chơi 100 câu, giao diện mặc định<br>
+                <strong>⭐ Tài khoản VIP:</strong> Không giới hạn câu hỏi, mở khóa tất cả giao diện
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" class="form-container">
+            <form onsubmit="handleRegister(event)">
+                <div class="input-group">
+                    <label for="registerUsername">Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="registerUsername" required autocomplete="username" minlength="3" maxlength="20">
+                        <span class="input-icon">👤</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="registerPassword">Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="registerPassword" required autocomplete="new-password" minlength="6">
+                        <span class="input-icon toggle-password" onclick="togglePassword('registerPassword')">👁️</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="registerPasswordConfirm">Xác nhận mật khẩu</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="registerPasswordConfirm" required autocomplete="new-password" minlength="6">
+                        <span class="input-icon toggle-password" onclick="togglePassword('registerPasswordConfirm')">👁️</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="registerBtn">
+                    Đăng ký
+                </button>
+            </form>
+
+            <div id="registerMessage" class="message"></div>
+
+            <div class="divider"><span>hoặc</span></div>
+
+            <button class="guest-btn" onclick="playAsGuest()">
+                🎮 Chơi với tư cách khách
+            </button>
+
+            <div class="info-box">
+                <strong>📌 Đăng ký FREE:</strong> Chơi 100 câu, giao diện mặc định<br>
+                <strong>⭐ Nâng cấp VIP:</strong> Liên hệ Zalo để nạp VIP
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+            <h3>💎 Nâng cấp VIP / Liên hệ</h3>
+            <p>📱 Nhà phát hành</p>
+            <a href="https://zalo.me/0343767490" target="_blank" class="zalo-btn">
+                💬 Zalo: 0343767490
+            </a>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Switch between login and register tabs
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const forms = document.querySelectorAll('.form-container');
+            
+            tabs.forEach(btn => btn.classList.remove('active'));
+            forms.forEach(form => form.classList.remove('active'));
+            
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+            
+            clearMessages();
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                icon.textContent = '👁️';
+            }
+        }
+
+        // Clear all messages
+        function clearMessages() {
+            document.getElementById('loginMessage').className = 'message';
+            document.getElementById('loginMessage').textContent = '';
+            document.getElementById('registerMessage').className = 'message';
+            document.getElementById('registerMessage').textContent = '';
+        }
+
+        // Show message
+        function showMessage(elementId, message, type) {
+            const messageEl = document.getElementById(elementId);
+            messageEl.textContent = message;
+            messageEl.className = `message ${type}`;
+        }
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+            
+            if (!username || !password) {
+                showMessage('loginMessage', 'Vui lòng điền đầy đủ thông tin!', 'error');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>Đang đăng nhập...';
+            clearMessages();
+            
+            setTimeout(() => {
+                const result = UserManager.login(username, password);
+                
+                if (result.success) {
+                    showMessage('loginMessage', '✅ Đăng nhập thành công!', 'success');
+                    
+                    // Clear guest mode
+                    localStorage.removeItem('playAsGuest');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'game.html';
+                    }, 1000);
+                } else {
+                    showMessage('loginMessage', result.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Đăng nhập';
+                }
+            }, 500);
+        }
+
+        // Handle register
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            const btn = document.getElementById('registerBtn');
+            
+            if (!username || !password || !passwordConfirm) {
+                showMessage('registerMessage', 'Vui lòng điền đầy đủ thông tin!', 'error');
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                showMessage('registerMessage', 'Mật khẩu xác nhận không khớp!', 'error');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>Đang đăng ký...';
+            clearMessages();
+            
+            setTimeout(() => {
+                const result = UserManager.register(username, password);
+                
+                if (result.success) {
+                    showMessage('registerMessage', '✅ Đăng ký thành công! Đang chuyển sang đăng nhập...', 'success');
+                    setTimeout(() => {
+                        document.getElementById('loginUsername').value = username;
+                        switchTab('login');
+                    }, 1500);
+                } else {
+                    showMessage('registerMessage', result.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Đăng ký';
+                }
+            }, 500);
+        }
+
+        // Play as guest
+        function playAsGuest() {
+            localStorage.setItem('playAsGuest', 'true');
+            UserManager.logout();
+            window.location.href = 'game.html';
+        }
+
+        // Check if already logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            if (UserManager.isLoggedIn()) {
+                const confirmation = confirm('Bạn đã đăng nhập. Bạn có muốn tiếp tục vào game không?');
+                if (confirmation) {
+                    window.location.href = 'game.html';
+                } else {
+                    UserManager.logout();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
