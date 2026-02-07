@@ -252,7 +252,7 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             border: 2px solid rgba(255, 255, 255, 0.5); /* Giảm từ 3px xuống 2px */
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Shadow nhỏ hơn */
-            display: flex;
+            display: none; /* Mặc định ẩn */
             align-items: center;
             justify-content: center;
             font-size: 1.4rem; /* Giảm từ 1.8rem xuống 1.4rem */
@@ -262,9 +262,9 @@
             animation: avatarPulse 2s ease-in-out infinite;
         }
 
-        /* Ẩn avatar khi đang chơi game */
-        body.playing #avatarButton {
-            display: none;
+        /* Chỉ hiện avatar khi ở trang chủ (startScreen visible) */
+        #startScreen:not(.hidden) ~ #avatarButton {
+            display: flex;
         }
 
         @keyframes avatarPulse {
@@ -501,7 +501,7 @@
             font-style: italic;
         }
 
-        /* Hiển thị lượt chơi trong suốt - góc phải trên */
+        /* Hiển thị lượt chơi - CHỈ HIỆN Ở TRANG CHỦ */
         #playCountDisplay {
             position: fixed;
             top: 60px;
@@ -519,6 +519,12 @@
             cursor: pointer;
             transition: all 0.3s;
             user-select: none;
+            display: none; /* Mặc định ẩn */
+        }
+
+        /* Chỉ hiện khi ở trang chủ */
+        #startScreen:not(.hidden) ~ #playCountDisplay {
+            display: block;
         }
 
         #playCountDisplay:hover {
@@ -2239,7 +2245,7 @@
 
         <!-- Hiển thị lượt chơi trong suốt (chỉ cho FREE user) -->
         <div id="playCountDisplay" class="hidden" onclick="showProviderInfo()">
-            <span id="playCountText">100/100</span>
+            <span id="playCountText">0/200</span>
         </div>
 
         <!-- Popup thông tin nhà cung cấp -->
@@ -7183,9 +7189,6 @@
                 // Hiển thị màn hình chính
                 document.getElementById('startScreen').classList.remove('hidden');
                 
-                // Xóa class 'playing' để hiển thị lại avatar
-                document.body.classList.remove('playing');
-                
                 hideEmojiPickerToggle();
                 hideCustomizeToggle();
             } catch(error) {
@@ -7909,9 +7912,6 @@
         }
 
         function startGame() {
-            // Thêm class 'playing' để ẩn avatar
-            document.body.classList.add('playing');
-            
             // Start background music
             startBackgroundMusic();
             bgMusic.currentTime = 0;
@@ -8877,7 +8877,7 @@ function renderMistakes() {
                 <div style="font-size: 3rem; margin-bottom: 15px;">🎯</div>
                 <h3 style="color: #1e3c72; margin-bottom: 10px; font-size: 1.4rem;">Đã hết lượt chơi!</h3>
                 <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                    Bạn đã chơi hết <strong>100 câu miễn phí</strong>.<br>
+                    Bạn đã chơi hết <strong>200 câu miễn phí</strong>.<br>
                     Nâng cấp VIP để chơi không giới hạn!
                 </p>
                 <div style="margin-bottom: 15px;">
@@ -8972,7 +8972,7 @@ function renderMistakes() {
                     
                     const played = QuestionLimitManager.getPlayedQuestions();
                     const remaining = QuestionLimitManager.getRemainingQuestions();
-                    document.getElementById('popupPlayCount').textContent = `${played}/100 (còn ${remaining})`;
+                    document.getElementById('popupPlayCount').textContent = `${played}/200 (còn ${remaining})`;
                 }
 
                 // Update avatar button style
@@ -8995,7 +8995,7 @@ function renderMistakes() {
                 playCountDisplay.classList.add('vip');
             } else {
                 const played = QuestionLimitManager.getPlayedQuestions();
-                playCountText.textContent = `${played}/100`;
+                playCountText.textContent = `${played}/200`;
                 playCountDisplay.classList.remove('vip');
             }
         }
