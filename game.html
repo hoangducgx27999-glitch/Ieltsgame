@@ -297,6 +297,127 @@
             font-style: italic;
         }
 
+        /* Hiển thị lượt chơi trong suốt - góc phải trên */
+        #playCountDisplay {
+            position: fixed;
+            top: 60px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: white;
+            font-weight: 600;
+            z-index: 99;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        #playCountDisplay:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        #playCountDisplay.vip {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 237, 78, 0.3));
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        /* Popup thông tin nhà cung cấp */
+        #providerInfoPopup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            z-index: 10000;
+            text-align: center;
+            max-width: 90%;
+            width: 380px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #providerInfoPopup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #providerInfoPopup h2 {
+            color: #1e3c72;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        #providerInfoPopup p {
+            color: #666;
+            font-size: 1rem;
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+
+        #providerInfoPopup .contact-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #0068ff, #0084ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        #providerInfoPopup .contact-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 104, 255, 0.4);
+        }
+
+        #providerInfoPopup .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #providerInfoPopup .close-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: rotate(90deg);
+        }
+
+        #popupOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #popupOverlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         /* Timer at BOTTOM of screen */
         #timerContainer {
             position: fixed;
@@ -1878,6 +1999,28 @@
             </div>
             <div id="questionText">你好</div>
             <div id="questionPinyin" style="display: none;">(nǐ hǎo)</div>
+        </div>
+
+        <!-- Hiển thị lượt chơi trong suốt (chỉ cho FREE user) -->
+        <div id="playCountDisplay" class="hidden" onclick="showProviderInfo()">
+            <span id="playCountText">100/100</span>
+        </div>
+
+        <!-- Popup thông tin nhà cung cấp -->
+        <div id="popupOverlay" onclick="hideProviderInfo()"></div>
+        <div id="providerInfoPopup">
+            <button class="close-btn" onclick="hideProviderInfo()">×</button>
+            <div style="font-size: 3rem; margin-bottom: 15px;">💎</div>
+            <h2>IELTS Vocabulary Game</h2>
+            <p><strong>Nhà phát hành:</strong></p>
+            <p>📚 3500 từ vựng IELTS 5.0-7.0</p>
+            <p><strong>Liên hệ hỗ trợ:</strong></p>
+            <a href="https://zalo.me/0343767490" target="_blank" class="contact-link">
+                💬 Zalo: 0343767490
+            </a>
+            <p style="margin-top: 20px; font-size: 0.85rem; color: #999;">
+                Nâng cấp VIP để mở khóa tất cả tính năng
+            </p>
         </div>
 
         <div class="hearts">
@@ -8267,6 +8410,37 @@ function renderMistakes() {
 
         canvas.addEventListener('contextmenu', e => e.preventDefault());
 
+        // ========== PLAY COUNT DISPLAY & PROVIDER INFO ==========
+        
+        // Show/hide provider info popup
+        function showProviderInfo() {
+            document.getElementById('popupOverlay').classList.add('show');
+            document.getElementById('providerInfoPopup').classList.add('show');
+        }
+
+        function hideProviderInfo() {
+            document.getElementById('popupOverlay').classList.remove('show');
+            document.getElementById('providerInfoPopup').classList.remove('show');
+        }
+
+        // Update play count display
+        function updatePlayCountDisplay() {
+            const playCountDisplay = document.getElementById('playCountDisplay');
+            const playCountText = document.getElementById('playCountText');
+            
+            if (UserManager.isVIP()) {
+                // VIP: Hiển thị badge VIP vàng
+                playCountDisplay.classList.remove('hidden');
+                playCountDisplay.classList.add('vip');
+                playCountText.textContent = '⭐ VIP';
+            } else {
+                // FREE: Hiển thị số lượt còn lại
+                const remaining = QuestionLimitManager.getRemainingQuestions();
+                playCountDisplay.classList.remove('hidden', 'vip');
+                playCountText.textContent = `${remaining}/100`;
+            }
+        }
+
         // ========== AUTH & VIP INTEGRATION ==========
         
         // Check authentication on page load
@@ -8285,78 +8459,20 @@ function renderMistakes() {
             const savedTheme = ThemeManager.getCurrentTheme();
             const allowedTheme = ThemeManager.applyTheme(savedTheme);
             
-            // Show user info in UI
-            updateUserInfoDisplay();
+            // KHÔNG hiển thị user info - CHỈ hiện ở trang login
+            // updateUserInfoDisplay(); - REMOVED
+            
+            // Hiển thị số lượt chơi (trong suốt)
+            updatePlayCountDisplay();
             
             // Restrict theme selector for FREE users
             restrictThemeSelector();
         });
 
-        // Update user info display
+        // Update user info display - REMOVED - Only show on login page
         function updateUserInfoDisplay() {
-            const currentUser = UserManager.getCurrentUser();
-            const isGuest = localStorage.getItem('playAsGuest') === 'true';
-            
-            // Add user info to header (you can customize position)
-            const homeButton = document.getElementById('homeButton');
-            if (homeButton && homeButton.parentElement) {
-                const userInfoDiv = document.createElement('div');
-                userInfoDiv.id = 'userInfoDisplay';
-                userInfoDiv.style.cssText = `
-                    position: fixed;
-                    top: 10px;
-                    right: 10px;
-                    background: rgba(255, 255, 255, 0.9);
-                    backdrop-filter: blur(10px);
-                    padding: 8px 15px;
-                    border-radius: 20px;
-                    font-size: 0.85rem;
-                    z-index: 1000;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                `;
-                
-                if (isGuest) {
-                    userInfoDiv.innerHTML = `
-                        <span style="color: #666; font-weight: 600;">👤 Khách</span>
-                        <button onclick="goToLogin()" style="
-                            background: linear-gradient(135deg, #1e3c72, #7e22ce);
-                            color: white;
-                            border: none;
-                            padding: 5px 12px;
-                            border-radius: 12px;
-                            font-size: 0.8rem;
-                            cursor: pointer;
-                            font-weight: 600;
-                            margin-left: 10px;
-                        ">Đăng nhập</button>
-                    `;
-                } else if (currentUser) {
-                    const vipBadge = UserManager.isVIP() ? 
-                        '<span style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 0.75rem; margin-left: 10px;">⭐ VIP</span>' : 
-                        '';
-                    
-                    userInfoDiv.innerHTML = `
-                        <span style="color: #1e3c72; font-weight: 600;">👤 ${currentUser.username}</span>
-                        ${vipBadge}
-                        <button onclick="logout()" style="
-                            background: rgba(239, 68, 68, 0.1);
-                            color: #ef4444;
-                            border: 1px solid rgba(239, 68, 68, 0.3);
-                            padding: 5px 12px;
-                            border-radius: 12px;
-                            font-size: 0.8rem;
-                            cursor: pointer;
-                            font-weight: 600;
-                            margin-left: 10px;
-                        ">Đăng xuất</button>
-                    `;
-                }
-                
-                document.body.appendChild(userInfoDiv);
-            }
+            // User info ONLY shown on login page, NOT in game
+            return;
         }
 
         // Restrict theme selector for FREE users
@@ -8365,36 +8481,20 @@ function renderMistakes() {
                 return; // VIP can use all themes
             }
 
-            // Find and disable VIP themes in theme selector
-            const themeButtons = document.querySelectorAll('.theme-option');
+            // FREE user: ẨN HOÀN TOÀN các theme khác, chỉ hiển thị Gradient
+            const themeButtons = document.querySelectorAll('.theme-option, .theme-box');
             themeButtons.forEach(btn => {
-                const theme = btn.getAttribute('data-theme');
-                if (!ThemeManager.isThemeUnlocked(theme)) {
-                    btn.style.opacity = '0.5';
-                    btn.style.cursor = 'not-allowed';
-                    btn.style.position = 'relative';
-                    
-                    // Add VIP lock icon
-                    const lockIcon = document.createElement('div');
-                    lockIcon.innerHTML = '🔒';
-                    lockIcon.style.cssText = `
-                        position: absolute;
-                        top: 5px;
-                        right: 5px;
-                        font-size: 1.2rem;
-                    `;
-                    btn.appendChild(lockIcon);
-                    
-                    // Prevent selection and show VIP message
-                    const originalOnClick = btn.onclick;
-                    btn.onclick = function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        showVIPMessage();
-                        return false;
-                    };
+                const theme = btn.getAttribute('data-theme') || btn.dataset.theme;
+                if (theme && theme !== 'gradient') {
+                    // ẨN HOÀN TOÀN - FREE user không thấy
+                    btn.style.display = 'none';
                 }
             });
+
+            // Force apply gradient theme for FREE users
+            if (!UserManager.isVIP()) {
+                changeTheme('gradient');
+            }
         }
 
         // Show VIP upgrade message
@@ -8467,8 +8567,8 @@ function renderMistakes() {
             // Increment question count
             QuestionLimitManager.incrementQuestionCount();
             
-            // Update display
-            updateUserInfoDisplay();
+            // Update play count display (thay vì updateUserInfoDisplay)
+            updatePlayCountDisplay();
             
             // Call original function
             originalNextQuestion.apply(this, arguments);
