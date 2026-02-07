@@ -241,29 +241,35 @@
         }
 
         /* Avatar Button - góc phải trên */
+        /* Avatar Button - Nhỏ hơn và chỉ hiển thị ở trang chủ */
         #avatarButton {
             position: fixed;
             top: 10px;
             right: 10px;
-            width: 50px;
-            height: 50px;
+            width: 40px;  /* Giảm từ 50px xuống 40px */
+            height: 40px; /* Giảm từ 50px xuống 40px */
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
-            border: 3px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5); /* Giảm từ 3px xuống 2px */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Shadow nhỏ hơn */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.4rem; /* Giảm từ 1.8rem xuống 1.4rem */
             cursor: pointer;
             z-index: 102;
             transition: all 0.3s;
             animation: avatarPulse 2s ease-in-out infinite;
         }
 
+        /* Ẩn avatar khi đang chơi game */
+        body.playing #avatarButton {
+            display: none;
+        }
+
         @keyframes avatarPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
-            50% { transform: scale(1.05); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4); }
+            0%, 100% { transform: scale(1); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); }
         }
 
         #avatarButton:hover {
@@ -279,18 +285,18 @@
         @keyframes avatarPulseVIP {
             0%, 100% { 
                 transform: scale(1); 
-                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+                box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
             }
             50% { 
                 transform: scale(1.08); 
-                box-shadow: 0 12px 35px rgba(255, 215, 0, 0.7);
+                box-shadow: 0 8px 30px rgba(255, 215, 0, 0.7);
             }
         }
 
-        /* Account Info Popup */
+        /* Account Info Popup - Điều chỉnh vị trí cho avatar nhỏ hơn */
         #accountInfoPopup {
             position: fixed;
-            top: 70px;
+            top: 60px; /* Giảm từ 70px xuống 60px */
             right: 10px;
             background: white;
             padding: 25px;
@@ -303,7 +309,6 @@
             transform-origin: top right;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-
         #accountInfoPopup.show {
             transform: scale(1);
         }
@@ -7178,6 +7183,9 @@
                 // Hiển thị màn hình chính
                 document.getElementById('startScreen').classList.remove('hidden');
                 
+                // Xóa class 'playing' để hiển thị lại avatar
+                document.body.classList.remove('playing');
+                
                 hideEmojiPickerToggle();
                 hideCustomizeToggle();
             } catch(error) {
@@ -7901,6 +7909,9 @@
         }
 
         function startGame() {
+            // Thêm class 'playing' để ẩn avatar
+            document.body.classList.add('playing');
+            
             // Start background music
             startBackgroundMusic();
             bgMusic.currentTime = 0;
