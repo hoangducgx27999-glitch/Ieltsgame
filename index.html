@@ -1837,7 +1837,7 @@
             position: fixed;
             top: 10px;
             right: 10px;
-            z-index: 9999;
+            z-index: 99999; /* Tăng z-index cao hơn */
             cursor: pointer;
             width: 40px;
             height: 40px;
@@ -1851,6 +1851,7 @@
             position: relative;
             width: 40px;
             height: 40px;
+            cursor: pointer; /* Thêm cursor pointer */
         }
 
         #headerAvatar {
@@ -2056,6 +2057,43 @@
             <img id="headerAvatar" src="" alt="Avatar" style="display: none;">
             <div id="defaultIcon">🥷🏻</div>
             <div id="vipBadge">👑</div>
+        </div>
+    </div>
+
+    <!-- VIP Upgrade Modal -->
+    <div class="auth-modal" id="vipUpgradeModal" style="display: none;">
+        <div class="auth-content" onclick="event.stopPropagation()" style="max-width: 500px;">
+            <span class="close-modal" onclick="closeVipUpgradeModal()">&times;</span>
+            
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 80px; margin-bottom: 20px;">🔒</div>
+                <h2 style="color: #7e22ce; margin-bottom: 15px; font-size: 28px;">Giao diện VIP</h2>
+                <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
+                    Giao diện này chỉ dành cho thành viên VIP!
+                </p>
+                
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; border-radius: 15px; color: white; margin-bottom: 25px;">
+                    <h3 style="margin: 0 0 15px 0; font-size: 20px;">✨ Đặc quyền VIP</h3>
+                    <ul style="text-align: left; list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 8px 0; font-size: 15px;">✅ Mở khóa TOÀN BỘ 3500 từ vựng IELTS 5.0-7.0</li>
+                        <li style="padding: 8px 0; font-size: 15px;">✅ Truy cập TẤT CẢ 5 giao diện đẹp mắt</li>
+                        <li style="padding: 8px 0; font-size: 15px;">✅ 21 emoji độc quyền cho VIP</li>
+                        <li style="padding: 8px 0; font-size: 15px;">✅ Học tập không giới hạn</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 10px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
+                    <p style="margin: 0; color: #856404; font-size: 14px;">
+                        📱 <strong>Liên hệ để nâng cấp VIP:</strong><br>
+                        Zalo: <strong>0343767940</strong><br>
+                        Email: <strong>qinghuacidian@gmail.com</strong>
+                    </p>
+                </div>
+                
+                <button onclick="closeVipUpgradeModal()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 40px; border-radius: 25px; font-size: 16px; cursor: pointer; font-weight: bold;">
+                    Đã hiểu
+                </button>
+            </div>
         </div>
     </div>
 
@@ -6903,8 +6941,8 @@
                 
                 // CHẶN click vào theme bị khóa
                 if (this.classList.contains('locked')) {
-                    // Hiển thị thông báo cần VIP
-                    alert('⚠️ Giao diện này chỉ dành cho thành viên VIP!\n\n✨ Nâng cấp lên VIP để mở khóa tất cả giao diện và 3500 từ vựng IELTS 5.0-7.0!');
+                    // Hiển thị modal VIP đẹp
+                    openVipUpgradeModal();
                     return; // Dừng lại, không làm gì thêm
                 }
                 
@@ -8743,6 +8781,7 @@ const freeEmojiSelector = document.getElementById('freeEmojiSelector');
 
 // Open/Close modal
 window.openAuthModal = function() {
+    console.log('🔵 openAuthModal clicked!'); // DEBUG
     authModal.classList.add('active');
 };
 
@@ -8750,10 +8789,37 @@ window.closeAuthModal = function() {
     authModal.classList.remove('active');
 };
 
-userAvatarContainer.addEventListener('click', openAuthModal);
+// VIP Upgrade Modal
+window.openVipUpgradeModal = function() {
+    const vipModal = document.getElementById('vipUpgradeModal');
+    if (vipModal) {
+        vipModal.style.display = 'flex';
+    }
+};
+
+window.closeVipUpgradeModal = function() {
+    const vipModal = document.getElementById('vipUpgradeModal');
+    if (vipModal) {
+        vipModal.style.display = 'none';
+    }
+};
+
+userAvatarContainer.addEventListener('click', function(e) {
+    console.log('🟢 Avatar container clicked!', e); // DEBUG
+    openAuthModal();
+});
 authModal.addEventListener('click', function(e) {
     if (e.target === authModal) closeAuthModal();
 });
+
+// Close VIP modal when clicking outside
+const vipModal = document.getElementById('vipUpgradeModal');
+if (vipModal) {
+    vipModal.addEventListener('click', function(e) {
+        if (e.target === vipModal) closeVipUpgradeModal();
+    });
+}
+
 
 // Google Login
 googleLoginBtn.addEventListener('click', async () => {
